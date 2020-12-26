@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>java.util.Map</OriginalElement>
+  <nodes>
+    <node x="400.875" y="198.0">javax.script.Bindings</node>
+    <node x="2512.533267457181" y="416.0">java.util.Collections.SynchronizedMap</node>
+    <node x="703.5" y="416.0">java.awt.RenderingHints</node>
+    <node x="1287.3875752870322" y="416.0">java.util.HashMap</node>
+    <node x="10.5" y="198.0">com.sun.org.apache.xerces.internal.xs.XSNamedMap</node>
+    <node x="141.5" y="416.0">java.util.stream.Collectors.Partition</node>
+    <node x="2028.2267374835308" y="198.0">javax.management.openmbean.TabularData</node>
+    <node x="188.5" y="198.0">java.util.concurrent.ConcurrentMap</node>
+    <node x="641.7625752870321" y="524.0">java.util.LinkedHashMap</node>
+    <node x="764.0" y="198.0">jdk.nashorn.internal.runtime.PropertyHashMap</node>
+    <node x="1055.5" y="0.0">java.util.Map</node>
+    <node x="2692.539361001318" y="198.0">com.sun.net.httpserver.Headers</node>
+    <node x="1786.0750752870322" y="416.0">java.util.Hashtable</node>
+    <node x="346.25" y="416.0">java.util.WeakHashMap</node>
+    <node x="995.9999999999999" y="198.0">javax.xml.ws.handler.MessageContext</node>
+    <node x="1448.0" y="198.0">java.lang.Cloneable</node>
+    <node x="1514.6875" y="416.0">java.util.IdentityHashMap</node>
+    <node x="1217.0" y="198.0">javafx.collections.FXCollections.SynchronizedMap</node>
+    <node x="2743.533267457181" y="416.0">java.util.Collections.CheckedMap</node>
+    <node x="2910.166790184454" y="198.0">javafx.collections.ObservableMap</node>
+    <node x="2973.416790184454" y="0.0">javafx.beans.Observable</node>
+    <node x="946.25" y="416.0">java.util.jar.Attributes</node>
+    <node x="2215.226737483531" y="198.0">java.io.Serializable</node>
+    <node x="569.75" y="198.0">java.util.AbstractMap</node>
+    <node x="2281.5332674571805" y="416.0">java.util.Collections.UnmodifiableMap</node>
+    <node x="1952.0750752870322" y="416.0">javax.management.openmbean.TabularDataSupport</node>
+    <node x="533.25" y="416.0">sun.misc.SoftCache</node>
+    <node x="1666.3541666666665" y="198.0">java.util.SortedMap</node>
+    <node x="1833.3541666666665" y="198.0">java.util.Dictionary</node>
+    <node x="2767.916790184454" y="0.0">jdk.Exported</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="java.util.Hashtable" target="java.util.Dictionary">
+      <point x="18.25" y="-29.0" />
+      <point x="1877.3250752870322" y="356.0" />
+      <point x="1911.8541666666665" y="356.0" />
+      <point x="0.0" y="29.0" />
+    </edge>
+    <edge source="javax.management.openmbean.TabularDataSupport" target="java.io.Serializable">
+      <point x="91.125" y="-29.0" />
+      <point x="2164.700075287032" y="396.0" />
+      <point x="2304.226737483531" y="396.0" />
+      <point x="0.0" y="29.0" />
+    </edge>
+    <edge source="java.util.HashMap" target="java.util.Map">
+      <point x="-15.5" y="-29.0" />
+      <point x="1333.8875752870322" y="316.0" />
+      <point x="1206.5" y="316.0" />
+      <point x="1206.5" y="178.0" />
+      <point x="1099.5217391304345" y="178.0" />
+      <point x="3.521739130434753" y="29.0" />
+    </edge>
+    <edge source="sun.misc.SoftCache" target="java.util.Map">
+      <point x="-36.5" y="-29.0" />
+      <point x="569.75" y="376.0" />
+      <point x="559.25" y="376.0" />
+      <point x="559.25" y="138.0" />
+      <point x="1078.391304347826" y="138.0" />
+      <point x="-17.608695652173992" y="29.0" />
+    </edge>
+    <edge source="java.awt.RenderingHints" target="java.lang.Cloneable">
+      <point x="50.0" y="-29.0" />
+      <point x="853.5" y="336.0" />
+      <point x="1460.1666666666665" y="336.0" />
+      <point x="-60.83333333333326" y="29.0" />
+    </edge>
+    <edge source="java.util.IdentityHashMap" target="java.util.Map">
+      <point x="26.375" y="-29.0" />
+      <point x="1646.5625" y="356.0" />
+      <point x="1655.8541666666665" y="356.0" />
+      <point x="1655.8541666666665" y="158.0" />
+      <point x="1106.565217391304" y="158.0" />
+      <point x="10.565217391304259" y="29.0" />
+    </edge>
+    <edge source="javax.script.Bindings" target="java.util.Map">
+      <point x="0.0" y="-29.0" />
+      <point x="468.375" y="128.0" />
+      <point x="1074.869565217391" y="128.0" />
+      <point x="-21.130434782608745" y="29.0" />
+    </edge>
+    <edge source="java.util.stream.Collectors.Partition" target="java.util.Map">
+      <point x="-36.5" y="-29.0" />
+      <point x="178.0" y="98.0" />
+      <point x="1064.304347826087" y="98.0" />
+      <point x="-31.695652173913004" y="29.0" />
+    </edge>
+    <edge source="java.util.SortedMap" target="java.util.Map">
+      <point x="0.0" y="-29.0" />
+      <point x="1739.3541666666665" y="148.0" />
+      <point x="1110.086956521739" y="148.0" />
+      <point x="14.086956521739012" y="29.0" />
+    </edge>
+    <edge source="java.awt.RenderingHints" target="java.util.Map">
+      <point x="-50.0" y="-29.0" />
+      <point x="753.5" y="158.0" />
+      <point x="1085.4347826086955" y="158.0" />
+      <point x="-10.565217391304259" y="29.0" />
+    </edge>
+    <edge source="javafx.collections.ObservableMap" target="java.util.Map">
+      <point x="-47.25" y="-29.0" />
+      <point x="2957.416790184454" y="78.0" />
+      <point x="1134.7391304347825" y="78.0" />
+      <point x="38.73913043478251" y="29.0" />
+    </edge>
+    <edge source="java.util.Hashtable" target="java.lang.Cloneable">
+      <point x="-54.75" y="-29.0" />
+      <point x="1804.3250752870322" y="286.0" />
+      <point x="1557.5" y="286.0" />
+      <point x="36.5" y="29.0" />
+    </edge>
+    <edge source="java.util.WeakHashMap" target="java.util.Map">
+      <point x="-41.75" y="-29.0" />
+      <point x="388.0" y="118.0" />
+      <point x="1071.3478260869565" y="118.0" />
+      <point x="-24.652173913043498" y="29.0" />
+    </edge>
+    <edge source="java.util.LinkedHashMap" target="java.util.Map">
+      <point x="-47.25" y="-29.0" />
+      <point x="689.0125752870321" y="499.0" />
+      <point x="0.0" y="499.0" />
+      <point x="0.0" y="78.0" />
+      <point x="1057.2608695652175" y="78.0" />
+      <point x="-38.73913043478251" y="29.0" />
+    </edge>
+    <edge source="com.sun.org.apache.xerces.internal.xs.XSNamedMap" target="java.util.Map">
+      <point x="0.0" y="-29.0" />
+      <point x="89.0" y="88.0" />
+      <point x="1060.782608695652" y="88.0" />
+      <point x="-35.21739130434776" y="29.0" />
+    </edge>
+    <edge source="java.util.jar.Attributes" target="java.lang.Cloneable">
+      <point x="39.25" y="-29.0" />
+      <point x="1064.0" y="346.0" />
+      <point x="1484.5" y="346.0" />
+      <point x="-36.5" y="29.0" />
+    </edge>
+    <edge source="javafx.collections.FXCollections.SynchronizedMap" target="java.util.Map">
+      <point x="0.0" y="-29.0" />
+      <point x="1322.5" y="168.0" />
+      <point x="1103.0434782608695" y="168.0" />
+      <point x="7.043478260869506" y="29.0" />
+    </edge>
+    <edge source="java.util.Collections.CheckedMap" target="java.io.Serializable">
+      <point x="-39.25" y="-29.0" />
+      <point x="2782.783267457181" y="376.0" />
+      <point x="2380.5124517692448" y="376.0" />
+      <point x="76.28571428571422" y="29.0" />
+    </edge>
+    <edge source="java.util.HashMap" target="java.lang.Cloneable">
+      <point x="15.5" y="-29.0" />
+      <point x="1364.8875752870322" y="356.0" />
+      <point x="1508.833333333333" y="356.0" />
+      <point x="-12.166666666666742" y="29.0" />
+    </edge>
+    <edge source="com.sun.net.httpserver.Headers" target="java.util.Map">
+      <point x="-31.0" y="-29.0" />
+      <point x="2723.539361001318" y="98.0" />
+      <point x="1127.695652173913" y="98.0" />
+      <point x="31.695652173913004" y="29.0" />
+    </edge>
+    <edge source="java.util.Collections.UnmodifiableMap" target="java.io.Serializable">
+      <point x="-52.75" y="-29.0" />
+      <point x="2334.2832674571805" y="396.0" />
+      <point x="2329.6553089121026" y="396.0" />
+      <point x="25.42857142857156" y="29.0" />
+    </edge>
+    <edge source="javax.management.openmbean.TabularDataSupport" target="java.lang.Cloneable">
+      <point x="-91.125" y="-29.0" />
+      <point x="1982.4500752870322" y="276.0" />
+      <point x="1581.833333333333" y="276.0" />
+      <point x="60.83333333333326" y="29.0" />
+    </edge>
+    <edge source="javax.management.openmbean.TabularDataSupport" target="java.util.Map">
+      <point x="-30.375" y="-29.0" />
+      <point x="2043.2000752870322" y="356.0" />
+      <point x="2017.7267374835308" y="356.0" />
+      <point x="2017.7267374835308" y="128.0" />
+      <point x="1117.1304347826085" y="128.0" />
+      <point x="21.130434782608745" y="29.0" />
+    </edge>
+    <edge source="sun.misc.SoftCache" target="java.util.AbstractMap">
+      <point x="36.5" y="-29.0" />
+      <point x="642.75" y="396.0" />
+      <point x="653.25" y="396.0" />
+      <point x="0.0" y="29.0" />
+    </edge>
+    <edge source="java.util.WeakHashMap" target="java.util.AbstractMap">
+      <point x="41.75" y="-29.0" />
+      <point x="471.5" y="396.0" />
+      <point x="619.85" y="396.0" />
+      <point x="-33.39999999999998" y="29.0" />
+    </edge>
+    <edge source="java.util.concurrent.ConcurrentMap" target="java.util.Map">
+      <point x="0.0" y="-29.0" />
+      <point x="283.0" y="108.0" />
+      <point x="1067.8260869565215" y="108.0" />
+      <point x="-28.17391304347825" y="29.0" />
+    </edge>
+    <edge source="java.util.Hashtable" target="java.util.Map">
+      <point x="-18.25" y="-29.0" />
+      <point x="1840.8250752870322" y="356.0" />
+      <point x="1822.8541666666665" y="356.0" />
+      <point x="1822.8541666666665" y="138.0" />
+      <point x="1113.608695652174" y="138.0" />
+      <point x="17.608695652173992" y="29.0" />
+    </edge>
+    <edge source="java.util.HashMap" target="java.util.AbstractMap">
+      <point x="-46.5" y="-29.0" />
+      <point x="1302.8875752870322" y="326.0" />
+      <point x="686.65" y="326.0" />
+      <point x="33.39999999999998" y="29.0" />
+    </edge>
+    <edge source="java.util.IdentityHashMap" target="java.io.Serializable">
+      <point x="79.125" y="-29.0" />
+      <point x="1699.3125" y="376.0" />
+      <point x="2253.369594626388" y="376.0" />
+      <point x="-50.85714285714266" y="29.0" />
+    </edge>
+    <edge source="javax.management.openmbean.TabularDataSupport" target="javax.management.openmbean.TabularData">
+      <point x="30.375" y="-29.0" />
+      <point x="2103.950075287032" y="356.0" />
+      <point x="2111.726737483531" y="356.0" />
+      <point x="0.0" y="29.0" />
+    </edge>
+    <edge source="java.util.IdentityHashMap" target="java.lang.Cloneable">
+      <point x="-26.375" y="-29.0" />
+      <point x="1593.8125" y="296.0" />
+      <point x="1533.1666666666665" y="296.0" />
+      <point x="12.166666666666742" y="29.0" />
+    </edge>
+    <edge source="java.util.IdentityHashMap" target="java.util.AbstractMap">
+      <point x="-79.125" y="-29.0" />
+      <point x="1541.0625" y="306.0" />
+      <point x="720.0500000000001" y="306.0" />
+      <point x="66.80000000000007" y="29.0" />
+    </edge>
+    <edge source="com.sun.net.httpserver.Headers" target="jdk.Exported">
+      <point x="31.0" y="-29.0" />
+      <point x="2785.539361001318" y="178.0" />
+      <point x="2835.416790184454" y="178.0" />
+      <point x="0.0" y="29.0" />
+    </edge>
+    <edge source="java.util.Collections.SynchronizedMap" target="java.io.Serializable">
+      <point x="-52.75" y="-29.0" />
+      <point x="2565.283267457181" y="386.0" />
+      <point x="2355.083880340673" y="386.0" />
+      <point x="50.85714285714266" y="29.0" />
+    </edge>
+    <edge source="java.util.stream.Collectors.Partition" target="java.util.AbstractMap">
+      <point x="36.5" y="-29.0" />
+      <point x="251.0" y="386.0" />
+      <point x="586.45" y="386.0" />
+      <point x="-66.79999999999995" y="29.0" />
+    </edge>
+    <edge source="java.util.jar.Attributes" target="java.util.Map">
+      <point x="-39.25" y="-29.0" />
+      <point x="985.5" y="178.0" />
+      <point x="1092.478260869565" y="178.0" />
+      <point x="-3.521739130434753" y="29.0" />
+    </edge>
+    <edge source="java.util.Collections.SynchronizedMap" target="java.util.Map">
+      <point x="52.75" y="-29.0" />
+      <point x="2670.783267457181" y="108.0" />
+      <point x="1124.173913043478" y="108.0" />
+      <point x="28.17391304347825" y="29.0" />
+    </edge>
+    <edge source="javafx.collections.ObservableMap" target="javafx.beans.Observable">
+      <point x="47.25" y="-29.0" />
+      <point x="0.0" y="29.0" />
+    </edge>
+    <edge source="java.util.Collections.UnmodifiableMap" target="java.util.Map">
+      <point x="52.75" y="-29.0" />
+      <point x="2439.7832674571805" y="396.0" />
+      <point x="2424.0689817428947" y="396.0" />
+      <point x="2424.0689817428947" y="118.0" />
+      <point x="1120.6521739130435" y="118.0" />
+      <point x="24.652173913043498" y="29.0" />
+    </edge>
+    <edge source="java.util.AbstractMap" target="java.util.Map">
+      <point x="0.0" y="-29.0" />
+      <point x="653.25" y="148.0" />
+      <point x="1081.9130434782605" y="148.0" />
+      <point x="-14.08695652173924" y="29.0" />
+    </edge>
+    <edge source="java.util.HashMap" target="java.io.Serializable">
+      <point x="46.5" y="-29.0" />
+      <point x="1395.8875752870322" y="366.0" />
+      <point x="2227.9410231978163" y="366.0" />
+      <point x="-76.28571428571422" y="29.0" />
+    </edge>
+    <edge source="java.util.Collections.CheckedMap" target="java.util.Map">
+      <point x="39.25" y="-29.0" />
+      <point x="2861.283267457181" y="88.0" />
+      <point x="1131.2173913043475" y="88.0" />
+      <point x="35.21739130434776" y="29.0" />
+    </edge>
+    <edge source="java.util.Hashtable" target="java.io.Serializable">
+      <point x="54.75" y="-29.0" />
+      <point x="1913.8250752870322" y="386.0" />
+      <point x="2278.7981660549594" y="386.0" />
+      <point x="-25.42857142857156" y="29.0" />
+    </edge>
+    <edge source="java.util.LinkedHashMap" target="java.util.HashMap">
+      <point x="47.25" y="-29.0" />
+      <point x="783.5125752870321" y="499.0" />
+      <point x="1349.3875752870322" y="499.0" />
+      <point x="0.0" y="29.0" />
+    </edge>
+    <edge source="jdk.nashorn.internal.runtime.PropertyHashMap" target="java.util.Map">
+      <point x="0.0" y="-29.0" />
+      <point x="869.5" y="168.0" />
+      <point x="1088.9565217391305" y="168.0" />
+      <point x="-7.043478260869506" y="29.0" />
+    </edge>
+    <edge source="javax.xml.ws.handler.MessageContext" target="java.util.Map">
+      <point x="0.0" y="-29.0" />
+      <point x="0.0" y="29.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.671946875363911" x="815.2277380503797" y="273.7129141563608" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
