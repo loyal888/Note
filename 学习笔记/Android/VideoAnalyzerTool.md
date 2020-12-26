@@ -10,8 +10,8 @@
 >
 ## FFMPEG（推荐）
 ```
-1.查看流信息： ffplay http://wliveplay.58cdn.com.cn/live/tThf1319104011445526529.flv -loglevel debug
-2.关键帧抓取： ffmpeg -i http://wliveplay.58cdn.com.cn/live/tThf1319104011445526529.flv -vf select='eq(pict_type\,I)' -vsync 2 -s 160x90 -f image2 thumbnails-%02d.jpeg
+1.查看流信息： ffplay http://test//live/tThf1319104011445526529.flv -loglevel debug
+2.关键帧抓取： ffmpeg -i http://test//live/tThf1319104011445526529.flv -vf select='eq(pict_type\,I)' -vsync 2 -s 160x90 -f image2 thumbnails-%02d.jpeg
 ```
 
 # 抓包分析工具

@@ -1,7 +1,7 @@
 # 简单使用
 `ffplay [options] [input_url]`
 ```bash
-～: ffplay http://wliveplay.58cdn.com.cn/live/ItnY1319147801917050880.flv
+～: ffplay http://test//live/ItnY1319147801917050880.flv
 ffplay version N-98661-g6fdf3cc Copyright (c) 2003-2020 the FFmpeg developers
   built with Apple clang version 11.0.3 (clang-1103.0.32.62)
   configuration: 
@@ -12,7 +12,7 @@ ffplay version N-98661-g6fdf3cc Copyright (c) 2003-2020 the FFmpeg developers
   libavfilter     7. 87.100 /  7. 87.100
   libswscale      5.  8.100 /  5.  8.100
   libswresample   3.  8.100 /  3.  8.100
-Input #0, flv, from 'http://wliveplay.58cdn.com.cn/live/ItnY1319147801917050880.flv':
+Input #0, flv, from 'http://test//live/ItnY1319147801917050880.flv':
   Metadata:
     fileSize        : 0
     audiochannels   : 2

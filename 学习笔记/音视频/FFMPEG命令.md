@@ -62,7 +62,7 @@ ffprobe -show_format  1.mp4
 
 # HTTP直播拉流防止盗链
 使用-herders 加入referer参数
-`ffmpeg -headers "referer:https://huyunsong.com"  -i http://wliveplay.58cdn.com.cn/live/yzS71335083855220113408.flv -c copy -y output.mp4`
+`ffmpeg -headers "referer:https://huyunsong.com"  -i http://test//live/yzS71335083855220113408.flv -c copy -y output.mp4`
 
 # TCP 监听接受流
 `ffmpeg -listen 1 -f flv -i tcp://127.0.0.1:1234/live/stream -c copy -f flv 111.flv`
