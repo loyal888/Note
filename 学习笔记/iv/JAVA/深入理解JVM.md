@@ -5,6 +5,9 @@
 ### 运行时数据区
 ![](https://upload-images.jianshu.io/upload_images/2614605-246286b040ad10c1.png?imageMogr2/auto-orient/strip|imageView2/2/w/578/format/webp)
 
+JDK 1.8
+![](https://user-gold-cdn.xitu.io/2019/12/14/16f04cdf3a0ba3ea?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
 Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域
 有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而一直存在，有些区域则是
 依赖用户线程的启动和结束而建立和销毁。
@@ -64,7 +67,15 @@ Java代码在进行Javac编译的时候，并不像C和C++那样有“连接”�
 扩展时，Java虚拟机将会抛出OutOfMemoryError异常。
 
 #### 5. 方法区
-// TODO
+- 方法区的作用？
+每个线程都共享的内存区域，用于存储已被虚拟机加载的*类型信息*、*常量*、*静态变量*、*即时编译后的代码缓存*
+
+- [元空间](https://juejin.cn/post/6844904020964802574) & [本地内存](https://www.jianshu.com/p/60afb21c8876)
+
+- 方法区的垃圾收集主要是什么？
+`常量池的回收`和对`类型的卸载`
+
+##### 5.1 运行时常量池
 
 ## 垃圾收集器与内存分配策略
 
