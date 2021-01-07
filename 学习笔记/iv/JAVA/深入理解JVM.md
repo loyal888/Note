@@ -145,6 +145,86 @@ ii. 把内存分配的动作按照线程划分在不同的空间之中进行，�
 
 > 直接指针来访问最大的好处就是速度更快，它节省了一次指针定位的时间开销.*HotSpot虚拟机使用这种方式。*
 >> ![](../../../img/2021-01-07-20-31-04.png)
+
+
+# JVM OutOfmemory实战
+**堆溢出**
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * VM Args：-Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError
+ *
+ * @author zzm
+ */
+public class HeapOOM {
+    static class OOMObject {
+    }
+
+    public static void main(String[] args) {
+        List<OOMObject> list = new ArrayList<OOMObject>();
+        while (true) {
+            list.add(new OOMObject());
+        }
+    }
+}
+```
+![](../../../img/2021-01-07-20-47-55.png)
+
+堆溢出问题分析：分为`内存泄漏（*Memory Leak*）`还是`内存溢出`*（MemoryOverflow）*。
+
+- 内存泄漏
+
+可进一步通过工具查看泄漏对象到GC Roots的引用链，找到泄漏对象是通过怎样的引用路径、与哪些GC Roots相关联，才导致垃圾收集器无法回收它们，根据泄漏对象的类型信息以及它到GC Roots引用链的信息，一般可以比较准确地定位到这些对象创建的位置，进而找出产生内存泄漏的代码的具体位置。
+
+- 内存溢出
+
+就应当检查Java虚拟机的堆参数（-Xmx与-Xms）设置，与机器的内存对比，看看是否还有向上调整的空间。
+
+再从代码上检查是否存在某些对象生命周期过长、持有状态时间过长、存储结构设计不合理等情况，尽量减少程序运行期的内存消耗。
+
+**虚拟机栈和本地方法栈溢出**
+
+HotSpot虚拟机中并不区分虚拟机栈和本地方法栈,栈容量可以由-Xss参数来设定。虚拟机栈和本地方法栈，在《Java虚拟机规范》中描述了两种异常：
+
+- 1）如果线程请求的`栈深度`大于`虚拟机所允许的最大深度`，将抛出`StackOverflowError`异常。
+
+- 2）如果虚拟机的`栈内存允许动态扩展`，当扩展栈容量无法申请到足够的内存时，将抛OutOfMemoryError异常。*而HotSpot虚拟机的选择是不支持扩展，所以除非在创建线程申请内存时就因无法获得足够内存而出现OutOfMemoryError异常，否则在线程运行时是不会因为扩展而导致内存溢出.*
+
+```java
+package deepLearningJVM;
+
+public class JavaVMStackSOF {
+    private int stackLength = 1;
+
+    public void stackLeak() {
+        stackLength++;
+        // 递归调用
+        stackLeak();
+    }
+
+    public static void main(String[] args) throws Throwable {
+        JavaVMStackSOF oom = new JavaVMStackSOF();
+        try {
+            oom.stackLeak();
+        } catch (Throwable e) {
+            System.out.println("stack length:" + oom.stackLength);
+            throw e;
+        }
+    }
+}
+```
+![](../../../img/2021-01-07-21-05-41.png)
+
+**方法区和运行时常量池溢出**
+方法区溢出：动态代理生成很多个代理类
+常量池溢出：String.inter(),jdk1.6和jdk1.7的区别？
+
+**本机直接内存溢出**
+//TODO
+
 ## 垃圾收集器与内存分配策略
 
 ## 虚拟机性能监控
