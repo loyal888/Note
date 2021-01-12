@@ -49,20 +49,20 @@ ffprobe -show_format  1.mp4
 ----
 
 # FFMPEG RTMP直播推流
-`ffmpeg  -i 1.mp4 -c:v libx264  -f flv -rtmp_app myapp -rtmp_playpath room  rtmp://rtmp.huyunsong.com`
+`ffmpeg  -i 1.mp4 -c:v libx264  -f flv -rtmp_app myapp -rtmp_playpath room  rtmp://rtmp.test.com`
 
 # FFPLAY RTMP 直播拉流
-`ffplay rtmp://rtmp.huyunsong.com/myapp/room`
+`ffplay rtmp://rtmp.test.com/myapp/room`
 
 # FFPLAY HTTP-FLV 拉流
 `ffplay -i 'http://10.252.220.220/live?app=myapp&stream=room'`
 
 # FFMPEG 录制
-`ffmpeg -i rtmp://rtmp.huyunsong.com/tv_file/room -c copy -f flv outpot.flv`
+`ffmpeg -i rtmp://rtmp.test.com/tv_file/room -c copy -f flv outpot.flv`
 
 # HTTP直播拉流防止盗链
 使用-herders 加入referer参数
-`ffmpeg -headers "referer:https://huyunsong.com"  -i http://test//live/yzS71335083855220113408.flv -c copy -y output.mp4`
+`ffmpeg -headers "referer:https://test.com"  -i http://test//live/yzS71335083855220113408.flv -c copy -y output.mp4`
 
 # TCP 监听接受流
 `ffmpeg -listen 1 -f flv -i tcp://127.0.0.1:1234/live/stream -c copy -f flv 111.flv`
@@ -72,7 +72,7 @@ ffprobe -show_format  1.mp4
 `ffmpeg -re -i 1.mp4 -c libx264 -f flv tcp:127.0.0.1:1234/live/stream`
 
 # FFMPEG 推多路流
-`ffmpeg  -i 1.mp4 -c libx264 -f flv - | ffmpeg -f flv -i - -c libx264  -f flv tcp://127.0.0.1:1234/live/stream -c libx264 -f flv -rtmp_app myapp -rtmp_playpath room  rtmp://rtmp.huyunsong.com`
+`ffmpeg  -i 1.mp4 -c libx264 -f flv - | ffmpeg -f flv -i - -c libx264  -f flv tcp://127.0.0.1:1234/live/stream -c libx264 -f flv -rtmp_app myapp -rtmp_playpath room  rtmp://rtmp.test.com`
 
 # FFMPEG 滤镜使用
 ## 使用filter添加水印
