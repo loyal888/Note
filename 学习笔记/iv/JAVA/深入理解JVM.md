@@ -445,3 +445,310 @@ Shenandoah & ZGC 略...
 
 # 第三部分 虚拟机执行子系统
 ## 类文件结构
+`任何一个Class文件都对应着唯一的一个类或接口的定义信息，但是反过来说，类或接口并不一定都得定义在文件里（譬如类或接口也可以动态生成，直接送入类加载器中）。实际上它完全不需要以磁盘文件的形式存在。`
+
+Class文件是一组以8个字节为基础单位的二进制流，Class文件格式采用一种类似于C语言结构体的伪结构来存储数据，这种伪结构中只有两种数据类型：`“无符号数”`和`“表”`。
+
+![](../../../img/2021-01-17-16-36-24.png)
+
+```java
+Classfile /Users/loyal888/Desktop/LeetCode/src/sort/QuikSort.class
+  Last modified 2021-1-17; size 832 bytes
+  MD5 checksum 5dcb4f17da556795267131c2987763e2
+  Compiled from "QuikSort.java"
+public class sort.QuikSort
+  minor version: 0
+  major version: 52
+  flags: ACC_PUBLIC, ACC_SUPER
+Constant pool:
+   #1 = Methodref          #7.#22         // java/lang/Object."<init>":()V
+   #2 = Methodref          #3.#23         // sort/QuikSort.quick_sort:([III)V
+   #3 = Class              #24            // sort/QuikSort
+   #4 = Methodref          #3.#22         // sort/QuikSort."<init>":()V
+   #5 = Fieldref           #25.#26        // java/lang/System.out:Ljava/io/PrintStream;
+   #6 = Methodref          #27.#28        // java/io/PrintStream.println:(I)V
+   #7 = Class              #29            // java/lang/Object
+   #8 = Utf8               <init>
+   #9 = Utf8               ()V
+  #10 = Utf8               Code
+  #11 = Utf8               LineNumberTable
+  #12 = Utf8               quick_sort
+  #13 = Utf8               ([III)V
+  #14 = Utf8               StackMapTable
+  #15 = Utf8               main
+  #16 = Utf8               ([Ljava/lang/String;)V
+  #17 = Class              #30            // "[Ljava/lang/String;"
+  #18 = Class              #24            // sort/QuikSort
+  #19 = Class              #31            // "[I"
+  #20 = Utf8               SourceFile
+  #21 = Utf8               QuikSort.java
+  #22 = NameAndType        #8:#9          // "<init>":()V
+  #23 = NameAndType        #12:#13        // quick_sort:([III)V
+  #24 = Utf8               sort/QuikSort
+  #25 = Class              #32            // java/lang/System
+  #26 = NameAndType        #33:#34        // out:Ljava/io/PrintStream;
+  #27 = Class              #35            // java/io/PrintStream
+  #28 = NameAndType        #36:#37        // println:(I)V
+  #29 = Utf8               java/lang/Object
+  #30 = Utf8               [Ljava/lang/String;
+  #31 = Utf8               [I
+  #32 = Utf8               java/lang/System
+  #33 = Utf8               out
+  #34 = Utf8               Ljava/io/PrintStream;
+  #35 = Utf8               java/io/PrintStream
+  #36 = Utf8               println
+  #37 = Utf8               (I)V
+{
+  public sort.QuikSort();
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+         4: return
+      LineNumberTable:
+        line 5: 0
+
+  public void quick_sort(int[], int, int);
+    descriptor: ([III)V
+    flags: ACC_PUBLIC
+    Code:
+      stack=4, locals=8, args_size=4
+         0: iload_2
+         1: iload_3
+         2: if_icmplt     6
+         5: return
+         6: iload_2
+         7: iconst_1
+         8: isub
+         9: istore        4
+        11: iload_3
+        12: iconst_1
+        13: iadd
+        14: istore        5
+        16: aload_1
+        17: iload_2
+        18: iload_3
+        19: iadd
+        20: iconst_1
+        21: ishr
+        22: iaload
+        23: istore        6
+        25: iload         4
+        27: iload         5
+        29: if_icmpge     86
+        32: iinc          4, 1
+        35: aload_1
+        36: iload         4
+        38: iaload
+        39: iload         6
+        41: if_icmplt     32
+        44: iinc          5, -1
+        47: aload_1
+        48: iload         5
+        50: iaload
+        51: iload         6
+        53: if_icmpgt     44
+        56: iload         4
+        58: iload         5
+        60: if_icmpge     25
+        63: aload_1
+        64: iload         4
+        66: iaload
+        67: istore        7
+        69: aload_1
+        70: iload         4
+        72: aload_1
+        73: iload         5
+        75: iaload
+        76: iastore
+        77: aload_1
+        78: iload         5
+        80: iload         7
+        82: iastore
+        83: goto          25
+        86: aload_0
+        87: aload_1
+        88: iload_2
+        89: iload         5
+        91: invokevirtual #2                  // Method quick_sort:([III)V
+        94: aload_0
+        95: aload_1
+        96: iload         5
+        98: iconst_1
+        99: iadd
+       100: iload_3
+       101: invokevirtual #2                  // Method quick_sort:([III)V
+       104: return
+      LineNumberTable:
+        line 7: 0
+        line 9: 6
+        line 10: 11
+        line 11: 16
+        line 13: 25
+        line 16: 32
+        line 17: 35
+        line 21: 44
+        line 22: 47
+        line 25: 56
+        line 26: 63
+        line 27: 69
+        line 28: 77
+        line 29: 83
+        line 31: 86
+        line 32: 94
+        line 33: 104
+      StackMapTable: number_of_entries = 5
+        frame_type = 6 /* same */
+        frame_type = 254 /* append */
+          offset_delta = 18
+          locals = [ int, int, int ]
+        frame_type = 6 /* same */
+        frame_type = 11 /* same */
+        frame_type = 41 /* same */
+
+  public static void main(java.lang.String[]);
+    descriptor: ([Ljava/lang/String;)V
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=4, locals=7, args_size=1
+         0: new           #3                  // class sort/QuikSort
+         3: dup
+         4: invokespecial #4                  // Method "<init>":()V
+         7: astore_1
+         8: bipush        6
+        10: newarray       int
+        12: dup
+        13: iconst_0
+        14: iconst_3
+        15: iastore
+        16: dup
+        17: iconst_1
+        18: iconst_2
+        19: iastore
+        20: dup
+        21: iconst_2
+        22: iconst_1
+        23: iastore
+        24: dup
+        25: iconst_3
+        26: iconst_3
+        27: iastore
+        28: dup
+        29: iconst_4
+        30: bipush        45
+        32: iastore
+        33: dup
+        34: iconst_5
+        35: iconst_0
+        36: iastore
+        37: astore_2
+        38: aload_1
+        39: aload_2
+        40: iconst_0
+        41: iconst_5
+        42: invokevirtual #2                  // Method quick_sort:([III)V
+        45: aload_2
+        46: astore_3
+        47: aload_3
+        48: arraylength
+        49: istore        4
+        51: iconst_0
+        52: istore        5
+        54: iload         5
+        56: iload         4
+        58: if_icmpge     81
+        61: aload_3
+        62: iload         5
+        64: iaload
+        65: istore        6
+        67: getstatic     #5                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        70: iload         6
+        72: invokevirtual #6                  // Method java/io/PrintStream.println:(I)V
+        75: iinc          5, 1
+        78: goto          54
+        81: return
+      LineNumberTable:
+        line 36: 0
+        line 37: 8
+        line 38: 38
+        line 40: 45
+        line 41: 67
+        line 40: 75
+        line 43: 81
+      StackMapTable: number_of_entries = 2
+        frame_type = 255 /* full_frame */
+          offset_delta = 54
+          locals = [ class "[Ljava/lang/String;", class sort/QuikSort, class "[I", class "[I", int, int ]
+          stack = []
+        frame_type = 248 /* chop */
+          offset_delta = 26
+}
+SourceFile: "QuikSort.java"
+```
+
+[魔数与Class文件的版本]()
+
+每个Class文件的头4个字节被称为魔数（Magic Number），它的唯一作用是确定这个文件是否为一个能被虚拟机接受的Class文件。
+
+![](../../../img/2021-01-17-16-45-12.png)
+
+[次版本号]()
+
+[主版本号]()
+
+[常量池]()
+由于常量池中常量的数量是不固定的，所以在常量池的入口需要放置一项u2类型的数据，代表`常量池容量计数值（constant_pool_count）`。
+
+常量池中主要存放两大类常量：`字面量（Literal）`和符号引用`（Symbolic References）`。
+
+符号引用包括:
+
+·被模块导出或者开放的包（Package）
+
+·类和接口的全限定名（Fully Qualified Name）
+
+·字段的名称和描述符（Descriptor）
+
+·方法的名称和描述符
+
+·方法句柄和方法类型（Method Handle、Method Type、Invoke Dynamic）
+
+·动态调用点和动态常量（Dynamically-Computed Call Site、Dynamically-Computed Constant）
+
+Java代码在进行Javac编译的时候，并不像C和C++那样有“连接”这一步骤，而是在虚拟机加载Class文件的时候进行动态连接。也就是说，在Class文件中不会保存各个方法、字段最终
+在内存中的布局信息，这些字段、方法的符号引用不经过虚拟机在运行期转换的话是无法得到真正的内存入口地址，也就无法直接被虚拟机使用的。当虚拟机做类加载时，将会从常量池获得对应的`符号引用，再在类创建时或运行时解析、翻译到具体的内存地址之中`。
+
+![](../../../img/2021-01-17-17-02-46.png)
+
+*常量池的17种类型*
+
+[访问标志]()
+在常量池结束之后，紧接着的2个字节代表访问标识（*access_flags*），这个标志用于识别一些类或者接口层次的访问信息，包括：这个Class是类还是接口；是否定义为public类型；是否定义为abstract类型；如果是类的话，是否被声明为final；
+
+![](../../../img/2021-01-17-17-17-01.png)
+
+[类索引、父类索引与接口索引集合]()
+
+`类索引（this_class）`和`父类索引（super_class）`都是一个u2类型的数据，而`接口索引集合（interfaces）`是一组u2类型的数据的集合，Class文件中由这三项数据来确定该类型的继承关系。类索引用于确定这个类的全限定名，父类索引用于确定这个类的父类的全限定名。由于Java语言不允许多重继承，所以父类索引只有一个，除了java.lang.Object外，所有的Java类都有父类，因此除了java.lang.Object外，所有Java类的父类索引都不为0。口索引集合就用来描述这个类实现了哪些接口，这些被实现的接口将按implements关键字（如果这个Class文件表示的是一个接口，则应当是extends关键字）后的接口顺序从左到右排列在接口索引集合中。
+
+![](../../../img/2021-01-17-17-24-15.png)
+
+[字段表集合]()
+
+`字段表（field_info）`用于描述`接口或者类中声明的变量`。Java语言中的“字段”（Field）包括`类级变量`以及`实例`级变量，但不包括在方法内部声明的局部变量。
+
+字段可以包括的`修饰符有字段的作用域`（public、private、protected修饰符）、是实例变量还是类变量（`static修饰符`）、可变性（`final`）、并发可见性（`volatile`修饰符，是否强制从主内存读写）、可否被序列化（`transient`修饰符）、字段`数据类型`（基本类型、对象、数组）、`字段名称`。
+
+[方法表集合]()
+
+方法表的结构如同字段表一样，依次包括访问标志（access_flags）、名称索引（name_index）、描述符索引（descriptor_index）、属性表集合（attributes）几项.
+
+[属性表集合]()
+
+![](../../../img/2021-01-17-17-45-51.png)
+
+![](../../../img/2021-01-17-17-46-11.png)
+
+<
