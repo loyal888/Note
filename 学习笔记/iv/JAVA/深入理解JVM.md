@@ -760,3 +760,89 @@ Java代码在进行Javac编译的时候，并不像C和C++那样有“连接”�
 ![](../../../img/2021-01-20-14-50-47.png)
 
 ![](../../../img/2021-01-20-14-51-24.png)
+
+- 编译器会在编译期或运行期将`byte和short`类型的数据`带符号扩展（Sign-Extend）`为
+相应的int类型数据，将`boolean和char`类型数据`零位扩展（Zero-Extend）`为相应的int类型数据。
+
+---
+
+- 数据运算可能会导致溢出，`例如两个很大的正整数相加，结果可能会是一个负数`，这种数学上不可能出现的溢出现象，《Java虚拟机规范》中并没有明确定义过整型数据溢出具体会得到什么计算结果，仅规定了在处理整型数据时，只有`除法指令（idiv和ldiv）以及求余指令（irem和lrem）`中当出现除数为零时会导致虚拟机抛出ArithmeticException异常，其余任何整型数运算场景都不应该抛出运行时异常。
+
+![](../../../img/2021-01-21-10-04-54.png)
+---
+
+- 指令可以分为`加载和存储指令`、`运算指令`、`类型转换指令`、`对象创建与访问指令`、`操作数栈管理指令`、`控制转移指令`、`方法调用和返回指令`、`异常处理指令`、`同步指令`
+
+**对象创建与访问指令**
+>
+> ·创建类实例的指令：`new`
+>
+> ·创建数组的指令：`newarray`、`anewarray`、`multianewarray`
+>
+> ·访问类字段（static字段，或者称为类变量）和实例字段（非static字段，或者称为实例变量）的指令：`getfield`、`putfield`、`getstatic`、`putstatic`
+>
+> ·把一个数组元素加载到操作数栈的指令：`baload`、`caload`、`saload`、`iaload`、`laload`、`faload`、
+`daload`、`aaload`
+>
+> ·将一个操作数栈的值储存到数组元素中的指令：`bastore、castore、sastore、iastore、fastore、
+dastore、aastore`
+>
+> ·取数组长度的指令：`arraylength`
+>
+> ·检查类实例类型的指令：`instanceof`、`checkcast`
+
+**操作数栈管理指令**
+
+Java虚拟机提供了一些用于直接操作操作数栈的指令，包括：
+
+·将操作数栈的栈顶一个或两个元素出栈：`pop`、`pop2`
+
+·复制栈顶一个或两个数值并将复制值或双份的复制值重新压入栈顶：`dup、dup2、dup_x1、
+dup2_x1、dup_x2、dup2_x2`
+
+·将栈最顶端的两个数值互换：`swap`
+
+**控制转移指令**
+
+控制转移指令包括：
+
+·条件分支：ifeq、iflt、ifle、ifne、ifgt、ifge、ifnull、ifnonnull、if_icmpeq、if_icmpne、if_icmplt、
+if_icmpgt、if_icmple、if_icmpge、if_acmpeq和if_acmpne
+
+·复合条件分支：tableswitch、lookupswitch
+
+·无条件分支：goto、goto_w、jsr、jsr_w、ret
+
+**方法调用和返回指令**
+
+·`invokevirtual`指令：用于`调用对象的实例方法`，根据对象的实际类型进行分派（虚方法分派），这也是Java语言中最常见的方法分派方式。
+
+·invokeinterface指令：用于调用接口方法，它会在运行时搜索一个实现了这个接口方法的对象，找出适合的方法进行调用。
+
+·invokespecial指令：用于调用一些需要特殊处理的实例方法，`包括实例初始化方法、私有方法和父类方法。`
+
+·invokestatic指令：用于调用类静态方法（static方法）。
+
+·invokedynamic指令：用于在运行时动态解析出调用点限定符所引用的方法。并执行该方法。前面四条调用指令的分派逻辑都固化在Java虚拟机内部，用户无法改变，而invokedynamic指令的分派逻辑是由用户所设定的引导方法决定的。
+
+方法调用指令与数据类型无关，而方法返回指令是根据返回值的类型区分的，包括`ireturn`（当返回值是boolean、byte、char、short和int类型时使用）、`lreturn、freturn、dreturn和areturn`
+
+**异常处理指令**
+- 显式抛出异常的操作（throw语句）都由athrow指令来实现
+
+- 处理异常（catch语句）采用异常表来完成。
+
+**同步指令**
+
+Java虚拟机可以支持`方法级的同步`和方法内部一段`指令序列的同步`，这两种同步结构都是使用锁（Monitor，更常见的是直接将它称为“锁”）来实现的。
+
+虚拟机可以从方法常量池中的方法表结构中的`ACC_SYNCHRONIZED`访问标志得知一个方法是否被声明为同步方法。当方法调用时，调用指令将会检查方法的ACC_SYNCHRONIZED访问标志是否被设置，如果设置了，执行线程就要求先成功持有锁，然后才能执行方法，最后当方法完成（无论是正常完成还是非正常完成）时释放锁。在方法执行期间，执行线程持有了管程，其他任何线程都无法再获取到同一个管程。`如果一个同步方法执行期间抛出了异常，并且在方法内部无法处理此异常`，那这个同步方法所持有的锁将在异常抛到`同步方法边界之外`时自动释放。
+
+同步一段指令集序列通常是由Java语言中的`synchronized`语句块来表示的，Java虚拟机的指令集中有`monitorenter`和`monitorexit`两条指令来支持synchronized关键字的语义，正确实现synchronized关键字
+需要Javac编译器与Java虚拟机两者共同协作支持.
+
+![](../../../img/2021-01-21-11-01-00.png)
+
+为了保证在方法异常完成时monitorenter和monitorexit指
+令依然可以正确配对执行，编译器会自动产生一个异常处理程序，这个异常处理程序声明可处理所有的异常，它的目的就是用来执行monitorexit指令。
+
