@@ -1040,7 +1040,7 @@ Java虚拟机以`方法`作为最基本的执行单元，`“栈帧”（Stack F
 
 操作数栈的每一个元素都可以是包括long和double在内的任意Java数据类型。
 
-32位数据类型所占的栈容量为1，64位数据类型所占的栈容量为2。
+32位数据类��所占的栈容量为1，64位数据类型所占的栈容量为2。
 
 `当一个方法刚刚开始执行的时候，这个方法的操作数栈是空的，在方法的执行过程中，会有各种字节码指令往操作数栈中写入和提取内容，也就是出栈和入栈操作。`
 
@@ -1062,3 +1062,179 @@ Java虚拟机以`方法`作为最基本的执行单元，`“栈帧”（Stack F
 以指向方法调用指令后面的一条指令等。
 
 # 方法调用
+
+## 解析
+
+在Java虚拟机支持以下5条`方法调用字节码指令`，分别是：
+·`invokestatic`。用于调用静态方法。
+
+`·invokespecial`。用于调用实例构造器<init>()方法、私有方法和父类中的方法。
+
+`·invokevirtual`。用于调用所有的虚方法。
+
+`·invokeinterface`。用于调用接口方法，会在运行时再确定一个实现该接口的对象。
+
+- <font color="red">解析调用</font>一定是个静态的过程，在编译期间就完全确定，在类加载的解析阶段就会把涉及的符号引用全部转变为明确的直接引用.
+
+只要能被`invokestatic和invokespecial`指令调用的方法，都可以在解析阶段中确定唯一的调用版本，Java语言里符合这个条件的方法共有`静态方法`、`私有方法`、`实例构造器`、`父类方法`4种，再`加上被final修饰的方法`（尽管它使用invokevirtual指令调用），这5种方法调用会`在类加载的时候就可以把符号引用解析为该方法的直接引用`。
+
+- <font color="red">分派（Dispatch）调用</font>，它可能是静态的也可能是动态的，按照分派依据的宗量数可分为`单分派和多分派`。这两类分派方式两两组合就构成了`静态单分派`、`静态多分派`、`动态单分派`、`动态多分派`4种分派组合情况。
+
+## 分派
+“重载”和“重写”在Java虚拟机之中是如何实现的?
+
+[1.静态分派]()
+
+```java
+public class StaticDispatch {
+    static abstract class Human {
+    }
+
+    static class Man extends Human {
+    }
+
+    static class Woman extends Human {
+    }
+
+    public void sayHello(Human guy) {
+        System.out.println("hello,guy!");
+    }
+
+    public void sayHello(Man guy) {
+        System.out.println("hello,gentleman!");
+    }
+
+    public void sayHello(Woman guy) {
+        System.out.println("hello,lady!");
+    }
+
+    public static void main(String[] args) {
+        Human man = new Man();
+        Human woman = new Woman();
+        StaticDispatch sr = new StaticDispatch();
+        sr.sayHello(man);
+        sr.sayHello(woman);
+    }
+}
+```
+
+![](../../../img/2021-01-25-17-07-40.png)
+
+`Human woman = new Woman();`
+
+把上面代码中的“Human”称为变量的`“静态类型”（Static Type）`，后面的“Man”则被称为变量的`“实际类型”（Actual Type）`。
+
+<font color="red">编译器重载时是通过参数的静态类型而不是实际类型作为判定依据的。</font>由于静态类型在编译期可知，所以在编译阶段，Javac编译器就根据参数的静态类型决定了会使用哪个重载版本，因此选择了sayHello(Human)作为调用目标，并把这个方法的符号引用写到main()方法里的两条invokevirtual指令的参数中。
+
+<font color="#87CEFA">需要注意Javac编译器虽然能确定出方法的重载版本，但在很多情况下这个重载版本并不是“唯一”的，往往只能确定一个“相对更合适的”版本。</font>
+
+详情见：<font color="#00FF7F">重载方法匹配优先级</font>
+
+[2.动态分派]()
+与重写<font color="red">（Override）</font>密切相关。
+
+```java
+/**
+* 方法动态分派演示
+* @author zzm
+*/
+public class DynamicDispatch {
+static abstract class Human {
+  protected abstract void sayHello();
+}
+static class Man extends Human {
+    @Override
+    protected void sayHello() {
+    System.out.println("man say hello");
+  }
+}
+static class Woman extends Human {
+    @Override
+    protected void sayHello() {
+    System.out.println("woman say hello");
+  }
+}
+public static void main(String[] args) {
+    Human man = new Man();
+    Human woman = new Woman();
+    man.sayHello();
+    woman.sayHello();
+    man = new Woman();
+    man.sayHello();
+  }
+}
+```
+- <font color="red">Java虚拟机是如何判断应该调用哪个方法的？</font>
+
+![](../../../img/2021-01-27-20-15-35.png)
+
+查看下<font color="red">invokevirtual</font>是怎么做的？
+
+invokevirtual指令的运行时解析过程大致分为以下几步：
+
+1）找到操作数栈顶的第一个元素所指向的对象的实际类型，记作C。
+
+2）如果在类型C中找到与常量中的描述符和简单名称都相符的方法，则进行访问权限校验，如果
+通过则返回这个方法的直接引用，查找过程结束；不通过则返回java.lang.IllegalAccessError异常。
+
+3）否则，按照继承关系从下往上依次对C的各个父类进行第二步的搜索和验证过程。
+
+4）如果始终没有找到合适的方法，则抛出java.lang.AbstractMethodError异常。
+
+因为invokevirtual指令执行的第一步就是在运行期确定接收者的实际类型,<font color="red">会把常量池中方法的符号引用解析到直接引用,还会根据方法接收者的实际类型来选择方法版本</font>，这个过程就是Java语言中方法重写的本质。我们把这种在运行期根据实际类型确定方法执行版本的分派过程称为<font color="#87CEFA">动态分派。</font>
+
+[3.单分派与多分派]()
+静态分派和动态分派：Java语言是一门`静态多分派`、`动态单分派`的语言。
+
+[4.虚拟机动态分派的实现]()
+
+一种基础而且常见的优化手段是为类型在方法区中建立一个虚方法表（Virtual Method Table，也称为vtable，与此对应的，在invokeinterface执行时也会用到接口方法表——Interface Method Table，简称itable），使用虚方法表索引来代替元数据查找以
+提高性能。
+
+![](../../../img/2021-01-27-20-32-40.png)
+
+虚方法表中存放着各个方法的实际入口地址。如果某个方法在子类中没有被重写，那子类的虚方法表中的地址入口和父类相同方法的地址入口是一致的，都指向父类的实现入口。如果子类中重写了这个方法，子类虚方法表中的地址也会被替换为指向子类实现版本的入口地址。
+
+
+为了程序实现方便，<font color="red">具有相同签名的方法，在父类、子类的虚方法表中都应当具有一样的索引序号，</font>这样当类型变换时，仅需要变更查找的虚方法表，就可以从不同的虚方法表中按索引转换出所需的入口地址。虚方法表一般在类加载的连接阶段进行初始化，准备了类的变量初始值后，虚拟机会把该类的虚方法表也一同初始化完毕。
+
+[5.invokedynamic]()
+invokedynamic指令与此前4条传统的“invoke*”指令的最大区别就是它的分派逻辑不是由虚拟机决定的，而是由程序员决定。
+```java
+class GrandFather {
+void thinking() {
+    System.out.println("i am grandfather");
+  }
+}
+class Father extends GrandFather {
+      void thinking() {
+      System.out.println("i am father");
+  }
+}
+class Son extends Father {
+    void thinking() {
+    // 实现调用祖父类的thinking()方法，打印"i am grandfather"
+
+    // 如果是JDK 7 Update 9之前,使用MethodHandle来解决问题,10之后它只能访问到其直接父类中的方法版本。
+      try {
+      MethodType mt = MethodType.methodType(void.class);
+      MethodHandle mh = lookup().findSpecial(GrandFather.class,
+      "thinking", mt, getClass());
+      mh.invoke(this);
+      } catch (Throwable e) {
+      }
+      }
+
+    // 反射突破限制
+    try {
+        MethodType mt = MethodType.methodType(void.class);
+        Field lookupImpl = MethodHandles.Lookup.class.getDeclaredField("IMPL_LOOKUP");
+        lookupImpl.setAccessible(true);
+        MethodHandle mh = ((MethodHandles.Lookup) lookupImpl.get(null)).findSpecial(GrandFather.class,"thinking", mt, GrandFather.class);
+        mh.invoke(this);
+        } catch (Throwable e) {
+      }
+    
+  }
+}
+```
