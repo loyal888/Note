@@ -1269,3 +1269,98 @@ Javac编译器输出的字节码指令流，基本上是一种基于栈的指令
 
 ![](../../../img/2021-01-28-14-32-53.png)
 
+# 类加载几执行子系统
+
+[动态加载的原理]()
+```java
+public class DynamicProxyTest {
+  interface IHello {
+    void sayHello();
+  }
+  static class Hello implements IHello {
+    @Override
+    public void sayHello() {
+      System.out.println("hello world");
+    }
+  }
+  static class DynamicProxy implements InvocationHandler {
+    Object originalObj;
+    Object bind(Object originalObj) {
+    this.originalObj = originalObj;
+    return Proxy.newProxyInstance(originalObj.getClass().getClassLoader(), originalObj.getClass().getInterfaces(), this);
+  }
+  @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+      System.out.println("welcome");
+      return method.invoke(originalObj, args);
+    }
+  }
+  public static void main(String[] args) {
+    IHello hello = (IHello) new DynamicProxy().bind(new Hello());
+    hello.sayHello();
+  }
+}
+```
+
+磁盘中将会产生一个名为“$Proxy0.class”的代理类Class文件，反
+编译后可以看见：
+
+```java
+public final class $Proxy0 extends Proxy
+implements DynamicProxyTest.IHello
+{
+private static Method m3;
+private static Method m1;
+private static Method m0;
+private static Method m2;
+public $Proxy0(InvocationHandler paramInvocationHandler)
+throws
+{
+  super(paramInvocationHandler);
+}
+
+public final void sayHello() throws
+{
+try
+{
+  // 这里调用了invoke()
+this.h.invoke(this, m3, null);
+return;
+}
+catch (RuntimeException localRuntimeException)
+{
+throw localRuntimeException;
+}
+catch (Throwable localThrowable)
+{
+throw new UndeclaredThrowableException(localThrowable);
+}
+}
+
+static
+{
+try
+{
+m3 = Class.forName("org.fenixsoft.bytecode.DynamicProxyTest$IHello").getMethod("sayHello", new Class[0]);
+m1 = Class.forName("java.lang.Object").getMethod("equals", new Class[] { Class.forName("java.lang.Object") });
+m0 = Class.forName("java.lang.Object").getMethod("hashCode", new Class[0]);
+m2 = Class.forName("java.lang.Object").getMethod("toString", new Class[0]);
+return;
+}
+catch (NoSuchMethodException localNoSuchMethodException)
+{
+throw new NoSuchMethodError(localNoSuchMethodException.getMessage());
+}
+catch (ClassNotFoundException localClassNotFoundException)
+{
+throw new NoClassDefFoundError(localClassNotFoundException.getMessage());
+}
+}
+}
+
+```
+
+<font color="red">
+总结：生成一个了代理类，代理类实现了传入接口的每个方法，在方法内部调用了`this.h.invoke()`,然后就调用到了我们定义的Proxy对象中的invoke方法中了。通过反射实现真正方法的调用。
+</font>
+
