@@ -1040,7 +1040,7 @@ Java虚拟机以`方法`作为最基本的执行单元，`“栈帧”（Stack F
 
 操作数栈的每一个元素都可以是包括long和double在内的任意Java数据类型。
 
-32位数据类��所占的栈容量为1，64位数据类型所占的栈容量为2。
+32位数据类���所占的栈容量为1，64位数据类型所占的栈容量为2。
 
 `当一个方法刚刚开始执行的时候，这个方法的操作数栈是空的，在方法的执行过程中，会有各种字节码指令往操作数栈中写入和提取内容，也就是出栈和入栈操作。`
 
@@ -1364,3 +1364,216 @@ throw new NoClassDefFoundError(localClassNotFoundException.getMessage());
 总结：生成一个了代理类，代理类实现了传入接口的每个方法，在方法内部调用了`this.h.invoke()`,然后就调用到了我们定义的Proxy对象中的invoke方法中了。通过反射实现真正方法的调用。
 </font>
 
+# 程序编译与代码优化
+
+## Javac编译器
+
+<font color="red">编译过程大致可以分为1个准备过程和3个处理过程:</font>
+
+1）准备过程：初始化插入式注解处理器。
+
+2）解析与填充符号表过程，包括：
+
+·词法、语法分析。将源代码的字符流转变为标记集合，构造出抽象语法树。
+
+·填充符号表。产生符号地址和符号信息。
+
+3）插入式注解处理器的注解处理过程。
+
+4）分析与字节码生成过程，包括：
+
+·标注检查。对语法的静态信息进行检查。
+
+·数据流及控制流分析。对程序动态运行过程进行检查。
+
+·解语法糖。将简化代码编写的语法糖还原为原有的形式。
+
+·字节码生成。将前面各个步骤所生成的信息转化成字节码。
+
+![](../../../img/2021-02-01-15-32-23.png)
+
+![](../../../img/2021-02-01-15-34-26.png)
+### 解析与填充符号表
+
+[1.1 词法分析]()
+词法分析是将源代码的字符流转变为`标记（Token）`集合的过程，单个字符是程序编写时的最小元素，但标记才是编译时的最小元素。关键字、变量名、字面量、运算符都可以作为标记，如“`int a=b+2`”这句代码中就包含了6个标记，分别是`int、a、=、b、+、2`，虽然关键字int由3个字符构成，但是它只是一个独立的标记，不可以再拆分。在Javac的源码中，词法分析过程由`com.sun.tools.javac.parser.Scanner`类来实现。
+
+[1.2 语法分析]()
+语法分析是根据标记序列构造抽象语法树的过程，`抽象语法树（Abstract Syntax Tree，AST）`是一种用来`描述程序代码语法结构的树形表示方式`，抽象语法树的每一个节点都代表着程序代码中的一个
+语法结构（SyntaxConstruct），例如包、类型、修饰符、运算符、接口、返回值甚至连代码注释等都可以是一种特定的语法结构。
+
+[2.填充符号表]()
+`符号表（Symbol Table）`是由一组`符号地址`和`符号信息`构成的数据结构，读者可以把它类比想象成哈希表中键值对的存储形式。
+
+符号表中所登记的信息在编译的不同阶段都要被用到。譬如在语义分析的过程中，符号表所登记的内容将用于语义检查（如检查一个名字的使用和原先的声明是否一致）和产生中间代码，在目标代码生成阶段，当对符号名进行地址分配时，符号表是地址分配的直接依据。
+
+在Javac源代码中，填充符号表的过程由com.sun.tools.javac.comp.Enter类实现，该过程的产出物是一个待处理列表，其中包含了每一个编译单元的抽象语法树的顶级节点，以及package-info.java（如果存在的话）的顶级节点。
+
+### 注解处理器
+以把插入式注解处理器看作是一组编译器的插件，当这些插件工作时，允许读取、修改、添加抽象语法树中的任意元素。如果这些插件在处理注解期间对语法树进行过修改，编译器将回到解析及填充符号表的过程重新处理，直到所有插入式注解处理器都没有再对语法树进行修改为止，每一次循环过程称为一个轮次（Round）。
+
+在Javac源码中，插入式注解处理器的初始化过程是在`initPorcessAnnotations()`方法中完成的，而它的执行过程则是在`processAnnotations()`方法中完成。这个方法会判断是否还有新的注解处理器需要执行，如果有的话，通过com.sun.tools.javac.processing.JavacProcessing-Environment类的`doProcessing()`方法来生成一个新的JavaCompiler对象，对编译的后续步骤进行处理。
+
+### 语义分析与字节码生成
+
+经过语法分析之后，编译器获得了程序代码的抽象语法树表示，抽象语法树能够表示一个结构正确的源程序，但无法保证源程序的语义是符合逻辑的。而语义分析的主要任务则是对结构上正确的源程序进行上下文相关性质的检查，譬如进行类型检查、控制流检查、数据流检查，等等。
+
+我们编码时经常能在IDE中看到由红线标注的错误提示，其中绝大部分都是来源于<font color="red">语义分析阶段的检查结果</font>。
+
+Javac在编译过程中，语义分析过程可分为`标注检查`和`数据及控制流分析`两个步骤。
+
+[1.标注检查]()
+
+标注检查步骤要检查的内容包括诸如变量使用前是否已被声明、变量与赋值之间的数据类型是否能够匹配，等等。
+
+标注检查步骤在Javac源码中的实现类是com.sun.tools.javac.comp.Attr类和com.sun.tools.javac.comp.Check类。
+
+[2.数据及控制流分析]()
+
+数据流分析和控制流分析是对程序上下文逻辑更进一步的验证，它可以检查出诸如程序局部变量在使用前是否有赋值、方法的每条路径是否都有返回值、是否所有的受查异常都被正确处理了等问题。
+
+[3.解语法糖]()
+语法糖（Syntactic Sugar）,指的是在计算机语言中添加的某种语法，这种语法对语言的编译结果和功能并没有实际影响，但是却能更方便程序员使用该语言。例如 <font color="red">Lambda 表达式</font>。
+
+[4.字节码生成]()
+字节码生成阶段不仅仅是把前面各个步骤所生成的信息（语法树、符号表）转化成字节码指令写到磁盘中，编译器还进行了少量的代码添加和转换工作。<font color="#87CEFA">如把字符串的加操作替换为StringBuffer或StringBuilder（取决于目标代码的版本是否大于或等于JDK 5）的append()操作，等等。</font>
+
+<font color="#00001F">完成了对语法树的遍历和调整之后，就会把填充了所有所需信息的符号表交到com.sun.tools.javac.jvm.ClassWriter类手上，由这个类的writeClass()方法输出字节码，生成最终的Class文件，到此，整个编译过程宣告结束。</font>
+
+## Java语法糖
+
+### [泛型]()
+泛型的本质是参数化类型（Parameterized Type）或者参数化多态（Parametric Polymorphism）的应用，即<font color="red">可以将操作的数据类型指定为方法签名中的一种特殊参数</font>，这种参数类型能够用在类、接口和方法的创建中，<font color="red">分别构成泛型类、泛型接口和泛型方法。</font>
+
+Java选择的泛型实现方式叫作`“类型擦除式泛型”（Type Erasure Generics）`，Java语言中的泛型只在程序源码中存在，在编译后的字节码文件中，全部泛型都被替换为原来的`裸类型（Raw Type）`，并且在相应的地方插入了强制转型代码，因此对于运行期的Java语言来说，ArrayList<int>与ArrayList<String>其实是同一个类型。
+
+<font color="red">类型擦除</font>
+用字节码反编译工具进行反编译后，将会发现泛型都不见了，程序又变回了Java泛型出现之前的写法，泛型类型都变回了裸类型，只在元素访问时插入了从Object到String的强制转型代码。
+
+<font color="#87CEFA">从Signature属性的出现我们还可以得出结论，擦除法所谓的擦除，仅仅是对方法的Code属性中的字节码进行擦除，实际上元数据中还是保留了泛型信息，这也是我们在编码时能通过反射手段取得参数化类型的根本依据。</font>
+
+### [自动装箱、拆箱与遍历循环]()
+<font color="red">java代码</font>
+```java
+        List<Integer> list = Arrays.asList(1, 2, 3, 4);
+        int sum = 0;
+        for (int i : list) {
+            sum += i;
+        }
+        System.out.println(sum);
+```
+
+<font color="red">字节码</font>
+```java
+ public static void main(java.lang.String[]);
+    descriptor: ([Ljava/lang/String;)V
+    flags: ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack=4, locals=5, args_size=1
+         0: iconst_4
+         1: anewarray     #2                  // class java/lang/Integer
+         4: dup
+         5: iconst_0
+         6: iconst_1
+         7: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        10: aastore
+        11: dup
+        12: iconst_1
+        13: iconst_2
+        14: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        17: aastore
+        18: dup
+        19: iconst_2
+        20: iconst_3
+        21: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        24: aastore
+        25: dup
+        26: iconst_3
+        27: iconst_4
+        28: invokestatic  #3                  // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+        31: aastore
+        32: invokestatic  #4                  // Method java/util/Arrays.asList:([Ljava/lang/Object;)Ljava/util/List;
+        35: astore_1
+        36: iconst_0
+        37: istore_2
+        38: aload_1
+        39: invokeinterface #5,  1            // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+        44: astore_3
+        45: aload_3
+        46: invokeinterface #6,  1            // InterfaceMethod java/util/Iterator.hasNext:()Z
+        51: ifeq          76
+        54: aload_3
+        55: invokeinterface #7,  1            // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        60: checkcast     #2                  // class java/lang/Integer
+        63: invokevirtual #8                  // Method java/lang/Integer.intValue:()I
+        66: istore        4
+        68: iload_2
+        69: iload         4
+        71: iadd
+        72: istore_2
+        73: goto          45
+        76: getstatic     #9                  // Field java/lang/System.out:Ljava/io/PrintStream;
+        79: iload_2
+        80: invokevirtual #10                 // Method java/io/PrintStream.println:(I)V
+        83: return
+      LineNumberTable:
+        line 10: 0
+        line 11: 36
+        line 12: 38
+        line 13: 68
+        line 14: 73
+        line 15: 76
+        line 16: 83
+      StackMapTable: number_of_entries = 2
+        frame_type = 254 /* append */
+          offset_delta = 45
+          locals = [ class java/util/List, int, class java/util/Iterator ]
+        frame_type = 250 /* chop */
+          offset_delta = 30
+}
+
+```
+<font color="red">反编译的代码</font>
+```bash
+public static void main(String[] args) {
+List list = Arrays.asList( new Integer[] {
+Integer.valueOf(1),
+Integer.valueOf(2),
+Integer.valueOf(3),
+Integer.valueOf(4) });
+int sum = 0;
+for (Iterator localIterator = list.iterator(); localIterator.hasNext(); ) {
+int i = ((Integer)localIterator.next()).intValue();
+sum += i;
+}
+System.out.println(sum);
+}
+```
+
+<font color="red">遍历循环则是把代码还原成了迭代器的实现，这也是为何遍历循环需要被遍历的类实现Iterable接口的原因。</font>
+
+[自动拆装箱陷阱]()
+```java
+public static void main(String[] args) {
+        Integer a = 1;
+        Integer b = 2;
+        Integer c = 3;
+        Integer d = 3;
+        Integer e = 321;
+        Integer f = 321;
+        Long g = 3L;
+        // -128~127 用的缓存，c和d为同一个对象相等，true
+        System.out.println(c == d);
+        // 大于127 直接new的，对象不同，false
+        System.out.println(e == f);
+        // 遇到算数运算符了，自动拆箱，true
+        System.out.println(c == (a + b));
+        // Integer.equals方法，比较的拆箱后的int值，true
+        System.out.println(c.equals(a + b));
+        // 在遇到算术运算符时会自动拆箱，3==3，true
+        System.out.println(g == (a + b));
+        // (a+b)自动装箱作为参数传入equals(Object obj)，(a+b)装箱不为Long,false
+        System.out.println(g.equals(a + b));
+    }
+```
+### [条件编译]()
