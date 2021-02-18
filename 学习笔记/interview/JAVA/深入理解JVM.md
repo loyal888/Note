@@ -1839,4 +1839,5 @@ public class ThreadThisEscape {
 使用·比较并交换（Compare-and-Swap）；原子类。
 
 
-
+# 锁优化
+// TODO 
